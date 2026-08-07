@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted-background: var(--muted-background);
+  --color-border: var(--border);
+  --radius-lg: var(--radius);
+}
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
@@ -7,47 +23,32 @@
   --card-foreground: #0f172a;
   --primary: #4f46e5;
   --primary-foreground: #ffffff;
-  --secondary: #e2e8f0;
+  --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
   --border: #e2e8f0;
+  --muted: #64748b;
+  --muted-background: #f1f5f9;
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: #0b0f19;
+  --background: #090d16;
   --foreground: #f8fafc;
-  --card: #131b2e;
+  --card: #0e1726;
   --card-foreground: #f8fafc;
   --primary: #6366f1;
   --primary-foreground: #ffffff;
   --secondary: #1e293b;
   --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
   --border: #1e293b;
+  --muted: #94a3b8;
+  --muted-background: #1e293b;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-/* Glassmorphism custom styles */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.dark .glass {
-  background: rgba(19, 27, 46, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Custom premium scrollbar */
@@ -69,11 +70,22 @@ body {
   background: rgba(99, 102, 241, 0.35);
 }
 
+/* Dot grid background pattern */
+.dot-grid {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .dot-grid {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
 /* Animations */
-@keyframes fadeIn {
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -81,6 +93,11 @@ body {
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.25s ease-out forwards;
+.animate-fade-in-up {
+  animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Focus ring standard */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/45 focus:border-primary transition-all;
 }

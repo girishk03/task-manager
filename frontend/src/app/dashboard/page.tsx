@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api, setAuthToken } from '../../lib/api';
 import { 
   LogOut, Sun, Moon, Plus, Filter, Search, Grid, List as ListIcon, 
-  Trash2, Edit3, CheckCircle2, Circle, Clock, ChevronRight, AlertCircle, Calendar, Sparkles
+  Trash2, Edit3, CheckCircle2, Circle, Clock, ChevronRight, AlertCircle, Calendar, Sparkles, CheckSquare
 } from 'lucide-react';
 import { useTheme } from '../../components/ThemeProvider';
 import TaskModal from '../../components/TaskModal';
@@ -163,11 +163,9 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="sticky top-0 z-40 w-full border-b border-border bg-card/80 backdrop-blur-md px-6 py-3">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm">
-              T
-            </div>
-            <span className="text-sm font-bold tracking-tight">Caseload Workspace</span>
+          <div className="flex items-center gap-2">
+            <CheckSquare className="h-5 w-5 text-primary" />
+            <span className="text-sm font-bold tracking-tight text-foreground">TaskForge</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -206,10 +204,10 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
-              Caseload Dashboard
+              Task Management Dashboard
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5 font-medium">
-              Monitor caseload targets, student metrics, and tasks.
+              Organize, prioritize, and track your work.
             </p>
           </div>
         </div>
@@ -256,7 +254,7 @@ export default function DashboardPage() {
               <Search className="absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search caseload tasks..."
+                placeholder="Search tasks..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2 text-sm focus-ring"
@@ -323,21 +321,42 @@ export default function DashboardPage() {
           </div>
         ) : filteredTasks.length === 0 ? (
           /* Empty States */
-          <div className="flex flex-col items-center justify-center text-center p-12 border border-dashed border-border rounded-2xl bg-card/30">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted-background text-muted-foreground mb-3">
-              <Clock className="h-6 w-6" />
+          tasks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center p-12 border border-dashed border-border rounded-2xl bg-card/40">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted-background text-muted-foreground mb-3">
+                <Clock className="h-6 w-6" />
+              </div>
+              <h3 className="text-sm font-bold text-foreground mb-1 uppercase tracking-wider">No tasks yet</h3>
+              <p className="text-xs text-muted-foreground max-w-xs mb-5 font-medium leading-normal">
+                Create your first task to start organizing your work.
+              </p>
+              <button
+                onClick={handleOpenCreate}
+                className="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-xs font-bold hover:opacity-95 active:scale-95 transition-all shadow-sm cursor-pointer"
+              >
+                Create your first task
+              </button>
             </div>
-            <h3 className="text-sm font-bold text-foreground mb-1 uppercase tracking-wider">No matching tasks</h3>
-            <p className="text-xs text-muted-foreground max-w-xs mb-5 font-medium leading-normal">
-              No caseload tasks match your query. Create a new task or adjust the filters above.
-            </p>
-            <button
-              onClick={handleOpenCreate}
-              className="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-xs font-bold hover:opacity-95 active:scale-95 transition-all shadow-sm cursor-pointer"
-            >
-              Add New Task
-            </button>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center text-center p-12 border border-dashed border-border rounded-2xl bg-card/40">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted-background text-muted-foreground mb-3">
+                <Clock className="h-6 w-6" />
+              </div>
+              <h3 className="text-sm font-bold text-foreground mb-1 uppercase tracking-wider">No matching tasks</h3>
+              <p className="text-xs text-muted-foreground max-w-xs mb-5 font-medium leading-normal">
+                Try adjusting your search or filters.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setPriorityFilter('ALL');
+                }}
+                className="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-xs font-bold hover:opacity-95 active:scale-95 transition-all shadow-sm cursor-pointer"
+              >
+                Clear Filters
+              </button>
+            </div>
+          )
         ) : viewMode === 'kanban' ? (
           /* Kanban Board View */
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -495,17 +514,8 @@ export default function DashboardPage() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border bg-card/20 py-5 text-center text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
-        <a 
-          href="https://digitalheroesco.com" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="hover:text-primary transition-colors"
-        >
-          Built for Digital Heroes Training Task
-        </a>
-      </footer>
+      {/* Spacer to prevent layout issues */}
+      <div className="py-4" />
 
       {/* Modal */}
       <TaskModal

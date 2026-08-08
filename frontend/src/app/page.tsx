@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api, getAuthToken } from '../lib/api';
-import { LogIn, Moon, Sun, ShieldAlert, Sparkles, Layout } from 'lucide-react';
+import { LogIn, Moon, Sun, ShieldAlert, Sparkles, Layout, CheckSquare } from 'lucide-react';
 import { useTheme } from '../components/ThemeProvider';
 
 export default function LoginPage() {
@@ -53,10 +53,8 @@ export default function LoginPage() {
       {/* Subtle top header overlay */}
       <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-20">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm">
-            T
-          </div>
-          <span className="text-sm font-semibold tracking-tight text-foreground">Workspace Manager</span>
+          <CheckSquare className="h-5 w-5 text-primary" />
+          <span className="text-sm font-semibold tracking-tight text-foreground font-bold">TaskForge</span>
         </div>
         <button
           onClick={toggleTheme}
@@ -73,10 +71,10 @@ export default function LoginPage() {
             <Layout className="h-5 w-5" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-foreground">
-            Caseload Task Manager
+            TaskForge Workspace
           </h1>
           <p className="text-xs text-muted-foreground mt-1 font-medium">
-            Full-Stack Technical Assessment
+            Efficient Task Management
           </p>
         </div>
 
@@ -122,17 +120,6 @@ export default function LoginPage() {
             )}
           </button>
         </form>
-
-        <div className="mt-8 border-t border-border pt-6 text-center">
-          <a
-            href="https://digitalheroesco.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] text-muted-foreground hover:text-primary transition-colors font-semibold uppercase tracking-wider"
-          >
-            Built for Digital Heroes Training Task
-          </a>
-        </div>
       </div>
     </div>
   );

@@ -11,16 +11,12 @@ export class AuthService {
   ) {}
 
   async loginGuest(customName?: string) {
-    const isStaticTest = customName === 'Test User';
-    const guestId = isStaticTest ? 'test-user-static-uuid-123' : randomUUID();
-    const guestEmail = isStaticTest ? 'test_user@taskmanager.local' : `guest_${guestId.substring(0, 8)}@taskmanager.local`;
+    const guestId = randomUUID();
+    const guestEmail = `guest_${guestId.substring(0, 8)}@taskmanager.local`;
     const guestName = customName || `Guest_${guestId.substring(0, 4)}`;
 
-    // Use upsert instead of create to avoid duplicates for the static test user
-    const user = await this.prisma.user.upsert({
-      where: { email: guestEmail },
-      update: { name: guestName },
-      create: {
+    const user = await this.prisma.user.create({
+      data: {
         id: guestId,
         email: guestEmail,
         name: guestName,

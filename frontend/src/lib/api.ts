@@ -90,7 +90,7 @@ export const api = {
     description?: string;
     status?: string;
     priority?: string;
-    dueDate?: string;
+    dueDate?: string | null;
   }) => {
     return request('/tasks', {
       method: 'POST',
@@ -105,7 +105,7 @@ export const api = {
       description?: string;
       status?: string;
       priority?: string;
-      dueDate?: string;
+      dueDate?: string | null;
     },
   ) => {
     return request(`/tasks/${id}`, {

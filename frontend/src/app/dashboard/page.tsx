@@ -82,7 +82,7 @@ export default function DashboardPage() {
     description: string;
     status: string;
     priority: string;
-    dueDate: string;
+    dueDate: string | null;
   }) => {
     try {
       if (editingTask) {

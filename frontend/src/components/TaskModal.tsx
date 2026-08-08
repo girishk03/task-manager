@@ -20,7 +20,7 @@ interface TaskModalProps {
     description: string;
     status: string;
     priority: string;
-    dueDate: string;
+    dueDate: string | null;
   }) => Promise<void>;
   task?: Task | null;
 }
@@ -63,15 +63,28 @@ export default function TaskModal({ isOpen, onClose, onSave, task }: TaskModalPr
       setError('Task title is required');
       return;
     }
+    
     setError('');
     setLoading(true);
+    
+    let formattedDueDate: string | null = null;
+    if (dueDate) {
+      const parsedDate = new Date(dueDate);
+      if (isNaN(parsedDate.getTime())) {
+        setError('Invalid due date selected');
+        setLoading(false);
+        return;
+      }
+      formattedDueDate = parsedDate.toISOString();
+    }
+
     try {
       await onSave({
         title: title.trim(),
         description: description.trim(),
         status,
         priority,
-        dueDate: dueDate ? new Date(dueDate).toISOString() : '',
+        dueDate: formattedDueDate,
       });
       onClose();
     } catch (err: any) {
@@ -94,7 +107,7 @@ export default function TaskModal({ isOpen, onClose, onSave, task }: TaskModalPr
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border p-5">
           <h2 className="text-base font-bold tracking-tight text-foreground uppercase">
-            {task ? 'Edit Caseload Task' : 'Create Caseload Task'}
+            {task ? 'Edit Task' : 'Create Task'}
           </h2>
           <button 
             onClick={onClose}
@@ -130,7 +143,7 @@ export default function TaskModal({ isOpen, onClose, onSave, task }: TaskModalPr
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter student metrics or task notes..."
+              placeholder="Add a description or notes..."
               rows={3}
               className="w-full rounded-xl border border-border bg-background p-3 text-sm focus-ring resize-none"
             />

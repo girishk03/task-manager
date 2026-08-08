@@ -1,8 +1,8 @@
-# Task Management System - Full Stack Assessment
+# Taskforge - Task Management System
 
-A modern, production-ready caseload and task management system built as part of the technical assessment. 
+A modern, production-ready task management system built as part of the technical assessment. 
 
-The project consists of a high-fidelity **Next.js App Router** frontend, a clean **NestJS REST API** backend, and database persistence powered by **Prisma** and **SQLite**.
+The project consists of a high-fidelity **Next.js App Router** frontend, a clean **NestJS REST API** backend, and database persistence powered by **Prisma** and **PostgreSQL**.
 
 ---
 
@@ -15,7 +15,7 @@ The project consists of a high-fidelity **Next.js App Router** frontend, a clean
 5. **Theme Switching:** Dark & Light modes with automatic `localStorage` persistence.
 6. **Input Validation:** Backend validation (`class-validator` DTOs) and validation error banners on the frontend.
 7. **Responsive UI:** Adaptive layout structured for mobile, tablet, and desktop viewports.
-8. **Error & Loading States:** Built-in loading skeletons, empty state illustrations, and connection retry filters.
+8. **Error & Loading States:** Built-in loading skeletons, empty state illustrations, and connection error handling.
 
 ---
 
@@ -24,7 +24,7 @@ The project consists of a high-fidelity **Next.js App Router** frontend, a clean
 ```
 task-manager/
 ├── frontend/                     # Next.js App Router (Tailwind CSS, TypeScript)
-├── backend/                      # NestJS REST API (Prisma, SQLite, TypeScript)
+├── backend/                      # NestJS REST API (Prisma, PostgreSQL, TypeScript)
 └── ablespace_product_analysis.md # Part 2 Product Analysis Report
 ```
 
@@ -35,6 +35,7 @@ task-manager/
 ### Prerequisites
 - Node.js (v18 or higher)
 - npm
+- PostgreSQL database connection (e.g. from Neon.tech, Supabase, or a local instance)
 
 ### 1. Backend Setup (NestJS)
 1. Navigate to the backend directory:
@@ -45,11 +46,16 @@ task-manager/
    ```bash
    npm install
    ```
-3. Run Prisma migrations to generate the database schema and SQLite database file:
+3. Configure your environment variables. Copy `.env.example` to `.env`:
    ```bash
-   npx prisma migrate dev --name init
+   cp .env.example .env
    ```
-4. Start the server:
+   Open the `.env` file and set your `DATABASE_URL` (PostgreSQL connection string) and `JWT_SECRET`.
+4. Synchronize the database schema with Prisma:
+   ```bash
+   npx prisma db push
+   ```
+5. Start the server:
    ```bash
    npm run start
    ```
@@ -98,15 +104,17 @@ All endpoints are prefixed with `/api` and require a JWT token in the `Authoriza
 
 ## ☁️ Production Deployment Guide
 
-To keep the application accessible for the required **45 days**, we recommend the following deployment combination:
+We recommend the following deployment combination:
 
-### 1. Backend (NestJS + SQLite) on Render
+### 1. Backend (NestJS + PostgreSQL) on Render
 - Register on [Render.com](https://render.com/).
 - Create a **Web Service** linked to your public GitHub repository.
-- Specify **Build Command**: `cd backend && npm install && npm run build`
-- Specify **Start Command**: `cd backend && npx prisma db push && npm run start:prod`
+- Specify **Root Directory**: `backend`
+- Specify **Build Command**: `npm install && npm run build`
+- Specify **Start Command**: `npx prisma db push && npm run start:prod`
 - Set Environment Variables:
-  - `JWT_SECRET` = Your secure key
+  - `DATABASE_URL` = Your persistent cloud PostgreSQL connection link (e.g. from Neon.tech)
+  - `JWT_SECRET` = A strong custom security secret key
   - `PORT` = `10000`
 
 ### 2. Frontend (Next.js) on Vercel
